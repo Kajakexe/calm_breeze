@@ -1,0 +1,19 @@
+#!/bin/sh
+
+xrandr --output DisplayPort-2 --mode 1920x1080 --pos 0x0 --rotate normal --rate 144
+xrandr --output DisplayPort-1 --mode 1920x1080 --pos 3840x0 --rotate normal --rate 260
+xrandr --output DisplayPort-0 --primary --mode 1920x1080 --pos 1920x0 --rotate normal --rate 144
+xrandr --output HDMI-A-0 --off
+
+nitrogen --restore &
+
+picom & 
+
+xset dpms 0 0 0
+
+# Kill any existing polybar instances
+killall -q polybar
+
+for m in $(polybar --list-monitors | cut -d":" -f1); do
+    MONITOR=$m polybar --reload lain &
+done
